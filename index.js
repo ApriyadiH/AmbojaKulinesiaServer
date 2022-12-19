@@ -2,8 +2,8 @@ const express = require('express');
 const router = require('./api');
 require("dotenv").config();
 
-const connect = require("./schemas");
-connect();
+// const connect = require("./schemas");
+// connect();
 
 const app = express();
 const port = process.env.PORT || 3001;
