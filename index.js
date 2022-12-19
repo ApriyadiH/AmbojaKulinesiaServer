@@ -1,5 +1,5 @@
 const express = require('express');
-const router = require('./routes/index')
+const router = require('./api/index')
 
 const connect = require("./schemas");
 connect();
