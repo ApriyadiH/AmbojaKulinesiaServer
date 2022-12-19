@@ -1,5 +1,5 @@
 const express = require('express');
-const router = require('./api/foodPosts');
+const router = require('./api');
 require("dotenv").config();
 
 const connect = require("./schemas");
