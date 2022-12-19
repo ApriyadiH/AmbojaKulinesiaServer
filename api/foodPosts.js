@@ -1,5 +1,5 @@
 const express = require("express");
-// const Foods = require("../schemas/foods");
+const FoodPosts = require("../schemas/foodPosts");
 
 const router = express.Router();
 

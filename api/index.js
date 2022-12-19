@@ -1,4 +1,4 @@
-const foodsRouter = require("./foods.js");
+const foodsRouter = require("./foodPosts");
 
 module.exports = [
     foodsRouter,
