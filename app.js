@@ -1,12 +1,18 @@
-const express = require("express");
-const app = express();
-const port = process.env.PORT || 3000;
+const express = require('express');
+const router = require('./routes/index')
 
-// API untuk mengetes server
+const connect = require("./schemas");
+connect();
+
+const app = express();
+const port = 3001;
+
 app.get("/", (req, res) => {
-  res.send("Testing ayam goreng");
+  res.send("pesan bebas diisi apa aja");
 });
+
+app.use('/api', router)
 
 app.listen(port, () => {
-  console.log(port, "Server is open with port!");
-});
+    console.log(port, 'Server is open with port!');
+})
