@@ -1,5 +1,6 @@
 const express = require('express');
-const router = require('./api/index')
+const router = require('./api/index');
+require("dotenv").config();
 
 const connect = require("./schemas");
 connect();
@@ -7,8 +8,7 @@ connect();
 const app = express();
 const port = process.env.PORT || 3001;
 
-
-app.use(express.json({ extended: false }));
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("pesan bebas diisi apa aja");
@@ -17,5 +17,5 @@ app.get("/", (req, res) => {
 app.use('/api', router)
 
 app.listen(port, () => {
-    console.log(port, 'Server is open with port!');
+  console.log(port, 'Server is open with port!');
 })
