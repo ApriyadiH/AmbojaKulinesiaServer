@@ -7,6 +7,9 @@ connect();
 const app = express();
 const port = process.env.PORT || 3001;
 
+
+app.use(express.json({ extended: false }));
+
 app.get("/", (req, res) => {
   res.send("pesan bebas diisi apa aja");
 });
