@@ -1,0 +1,23 @@
+{
+  "name": "ambojakulinesiaserver",
+  "version": "1.0.0",
+  "description": "Server or back-end for Amboja Kulinesia project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ApriyadiH/ambojakulinesiaserver.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ApriyadiH/ambojakulinesiaserver/issues"
+  },
+  "homepage": "https://github.com/ApriyadiH/ambojakulinesiaserver#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
