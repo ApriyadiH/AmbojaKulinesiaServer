@@ -9,10 +9,6 @@ const likedPostSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    isLike: {
-        type: Boolean,
-        required: true
-    },
 },{
     timestamps:true
 })
