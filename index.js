@@ -1,6 +1,6 @@
 const express = require('express');
 const router = require('./api');
-require("dotenv").config();
+// require("dotenv").config();
 
 // const connect = require("./schemas");
 // connect();
