@@ -35,6 +35,12 @@ router.post("/post", authMiddleware, async (req, res) => {
     const userId = user._id;
     const isAdmin = user.isAdmin;
 
+    const existCulinary = await FoodPosts.findOne({ foodName }).exec();
+
+    if (existCulinary) {
+      return res.status(400).send({ message: "Culinary already exist." })
+    }
+
     if (isAdmin) {
       const status = 'approved';
 
@@ -88,49 +94,50 @@ router.put("/post", authMiddleware, async (req, res) => {
     const { user } = res.locals;
     const isAdmin = user.isAdmin;
 
-    const existPost = await FoodPosts.findById(postId).exec();
+    try {
+      const existPost = await FoodPosts.findById(postId).exec();
 
-    if (!existPost) {
-      return res.status(400).send({ message: 'Post not found.' });
-    }
+      const pastRegion = existPost.region;
+      const pastFoodName = existPost.foodName;
+      const pastDescription = existPost.description;
+      let likes = existPost.likes;
 
-    const pastRegion = existPost.region;
-    const pastFoodName = existPost.foodName;
-    const pastDescription = existPost.description;
-    let likes = existPost.likes;
+      if ((pastRegion !== region && pastFoodName !== foodName) ||
+        (pastFoodName !== foodName && pastDescription !== description)) {
 
-    if ((pastRegion !== region && pastFoodName !== foodName) ||
-      (pastFoodName !== foodName && pastDescription !== description)) {
+        likes = 0;
+        const postWithLike = await LikedPosts.find({ postId }).exec();
 
-      likes = 0;
-      const postWithLike = await LikedPosts.find({ postId }).exec();
-
-      if (postWithLike) {
-        for (const likedPost of postWithLike) {
-          await likedPost.delete();
+        if (postWithLike) {
+          for (const likedPost of postWithLike) {
+            await likedPost.delete();
+          }
         }
       }
-    }
 
-    if (isAdmin) {
-      existPost.foodName = foodName;
-      existPost.region = region;
-      existPost.imageUrls = imageUrls;
-      existPost.description = description;
-      existPost.likes = likes;
+      if (isAdmin) {
+        existPost.foodName = foodName;
+        existPost.region = region;
+        existPost.imageUrls = imageUrls;
+        existPost.description = description;
+        existPost.likes = likes;
 
-      await existPost.save();
-      return res.status(200).send({ message: "Post successfully edited." })
-    } else {
-      existPost.foodName = foodName;
-      existPost.region = region;
-      existPost.imageUrls = imageUrls;
-      existPost.description = description;
-      existPost.likes = likes;
-      existPost.status = 'pending';
+        await existPost.save();
+        return res.status(200).send({ message: "Post successfully edited." })
+      } else {
+        existPost.foodName = foodName;
+        existPost.region = region;
+        existPost.imageUrls = imageUrls;
+        existPost.description = description;
+        existPost.likes = likes;
+        existPost.status = 'pending';
 
-      await existPost.save();
-      return res.status(200).send({ message: "Edited post successfully saved. Please wait for admin to approve it." })
+        await existPost.save();
+        return res.status(200).send({ message: "Edited post successfully saved. Please wait for admin to approve it." })
+      }
+    } catch (error) {
+      console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
+      return res.status(400).send({ message: "Post not found." })
     }
   } catch (error) {
     console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
@@ -141,22 +148,27 @@ router.put("/post", authMiddleware, async (req, res) => {
 router.delete("/post", authMiddleware, async (req, res) => {
   const { postId } = req.body;
 
-  const existPost = await FoodPosts.findById(postId).exec();
+  try {
+    const existPost = await FoodPosts.findById(postId).exec();
 
-  if (!existPost) {
-    return res.status(400).send({ message: 'Post not found.' });
-  }
-
-  await existPost.delete();
-
-  const postWithLike = await LikedPosts.find({ postId }).exec();
-  if (postWithLike) {
-    for (const likedPost of postWithLike) {
-      await likedPost.delete();
+    if (existPost.status === 'pending') {
+      return res.status(400).send({ message: "Cannot delete pending request."})
     }
-  }
 
-  return res.status(200).send({ message: "Post successfully deleted." })
+    await existPost.delete();
+
+    const postWithLike = await LikedPosts.find({ postId }).exec();
+    if (postWithLike) {
+      for (const likedPost of postWithLike) {
+        await likedPost.delete();
+      }
+    }
+
+    return res.status(200).send({ message: "Post successfully deleted." })
+  } catch (error) {
+    console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
+    return res.status(400).send({ message: "Post not found." })
+  }
 });
 
 module.exports = router;

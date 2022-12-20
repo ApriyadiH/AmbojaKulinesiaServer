@@ -30,8 +30,9 @@ const foodPostsSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-  },
-);
+  }, {
+  timestamps: true
+});
 
 foodPostsSchema.virtual("postId").get(function () {
   return this._id.toHexString();

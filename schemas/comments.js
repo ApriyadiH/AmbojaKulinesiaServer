@@ -14,8 +14,9 @@ const commentsSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-  },
-);
+  },{
+    timestamps:true
+});
 
 commentsSchema.virtual("commentId").get(function () {
   return this._id.toHexString();
