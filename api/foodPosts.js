@@ -138,7 +138,7 @@ router.put("/post", authMiddleware, async (req, res) => {
   }
 });
 
-router.delete("post", authMiddleware, async (req, res) => {
+router.delete("/post", authMiddleware, async (req, res) => {
   const { postId } = req.body;
 
   const existPost = await FoodPosts.findById(postId).exec();
@@ -148,6 +148,14 @@ router.delete("post", authMiddleware, async (req, res) => {
   }
 
   await existPost.delete();
+
+  const postWithLike = await LikedPosts.find({ postId }).exec();
+  if (postWithLike) {
+    for (const likedPost of postWithLike) {
+      await likedPost.delete();
+    }
+  }
+
   return res.status(200).send({ message: "Post successfully deleted." })
 });
 
