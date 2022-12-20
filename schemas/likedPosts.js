@@ -9,15 +9,11 @@ const likedPostSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    isLike: {
-        type: Boolean,
-        required: true
-    },
 },{
     timestamps:true
 })
 
-userSchema.virtual("likedPostId").get(function () {
+likedPostSchema.virtual("likedPostId").get(function () {
     return this._id.toHexString();
 });
 

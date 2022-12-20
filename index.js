@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const router = require('./api/index');
 require("dotenv").config();
 
@@ -8,7 +8,7 @@ connect();
 const app = express();
 const port = process.env.PORT || 8080;
 
-app.use(express.json({extended: false}));
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Connected to Server");
