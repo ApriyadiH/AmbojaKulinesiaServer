@@ -1,5 +1,5 @@
 const express = require('express');
-const router = require('./api');
+const router = require('./api/index');
 require("dotenv").config();
 
 const connect = require("./schemas");
