@@ -17,7 +17,7 @@ const commentsSchema = new mongoose.Schema(
   },
 );
 
-foodsSchema.virtual("commentId").get(function () {
+commentsSchema.virtual("commentId").get(function () {
   return this._id.toHexString();
 });
 

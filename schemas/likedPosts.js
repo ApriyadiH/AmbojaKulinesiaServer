@@ -13,7 +13,7 @@ const likedPostSchema = new mongoose.Schema({
     timestamps:true
 })
 
-userSchema.virtual("likedPostId").get(function () {
+likedPostSchema.virtual("likedPostId").get(function () {
     return this._id.toHexString();
 });
 
