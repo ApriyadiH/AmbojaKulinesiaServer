@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/foods", async (req, res) => {
-  return res.status(200).send({ message: {FoodPosts}});
+  return res.status(200).send({ message: "ayam goreng"});
 });
 
 module.exports = router;
