@@ -11,10 +11,10 @@ const port = process.env.PORT || 8080;
 app.use(express.json({extended: false}));
 
 app.get("/", (req, res) => {
-  res.send("pesan bebas diisi apa aja");
+  res.send("Connected to Server");
 });
 
-app.use('/api', router)
+app.use('/', router)
 
 app.listen(port, () => {
   console.log(port, 'Server is open with port!');
