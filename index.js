@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const router = require('./api/index');
 require("dotenv").config();
 
@@ -6,7 +6,7 @@ const connect = require("./schemas");
 connect();
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 8080;
 
 app.use(express.json());
 
