@@ -33,7 +33,7 @@ const foodPostsSchema = new mongoose.Schema(
   },
 );
 
-foodsSchema.virtual("postId").get(function () {
+foodPostsSchema.virtual("postId").get(function () {
   return this._id.toHexString();
 });
 
