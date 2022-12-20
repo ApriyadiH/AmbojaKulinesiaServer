@@ -9,18 +9,37 @@ router.get('/admin/post', authMiddleware, async (req, res) => {
     const isAdmin = user.isAdmin;
 
     if (!isAdmin) {
-        return res.status(400).send({ message: "Only admin can view all of the posts."})
+        return res.status(400).send({ message: "Only admin can view all of the posts." })
     }
 
     const postList = await FoodPosts.find({ status: 'approved' }).exec();
 
-    if (!postList) {
+    if (postList.length < 1) {
         return res.status(400).send({ message: 'Post not found.' });
     }
 
-    postList.sort((a, b) => { a.createdAt - b.createdAt });
+    const result = postList.map(request => ({
+        postId: request._id,
+        foodName: request.foodName,
+        region: request.region,
+        imageUrls: request.imageUrls,
+        description: request.description,
+        createdAt: request.createdAt
+    }))
 
-    return res.status(200).send({ data: postList });
+    result.sort((a, b) => {
+        const date1 = a.createdAt;
+        const date2 = b.createdAt;
+        if (date1 < date2) {
+            return 1
+        } else if (date1 > date2) {
+            return -1
+        } else {
+            return 1
+        }
+    });
+
+    return res.status(200).send({ data: result });
 });
 
 router.get('/admin/request', authMiddleware, async (req, res) => {
@@ -28,18 +47,37 @@ router.get('/admin/request', authMiddleware, async (req, res) => {
     const isAdmin = user.isAdmin;
 
     if (!isAdmin) {
-        return res.status(400).send({ message: "Only admin can view pending user requests."})
+        return res.status(400).send({ message: "Only admin can view pending user requests." })
     }
 
     const pendingRequest = await FoodPosts.find({ status: 'pending' }).exec();
 
-    if (!pendingRequest) {
+    if (pendingRequest.length < 1) {
         return res.status(400).send({ message: 'There is no pending request.' });
     }
 
-    pendingRequest.sort((a, b) => { a.createdAt - b.createdAt });
+    const result = pendingRequest.map(request => ({
+        postId: request._id,
+        foodName: request.foodName,
+        region: request.region,
+        imageUrls: request.imageUrls,
+        description: request.description,
+        createdAt: request.createdAt
+    }))
 
-    return res.status(200).send({ data: pendingRequest });
+    result.sort((a, b) => {
+        const date1 = a.createdAt;
+        const date2 = b.createdAt;
+        if (date1 < date2) {
+            return 1
+        } else if (date1 > date2) {
+            return -1
+        } else {
+            return 1
+        }
+    });
+
+    return res.status(200).send({ data: result });
 });
 
 router.patch('/admin/request/approve', authMiddleware, async (req, res) => {
@@ -51,16 +89,21 @@ router.patch('/admin/request/approve', authMiddleware, async (req, res) => {
         return res.status(400).send({ message: "Only admin can approve this request." });
     }
 
-    const existRequest = await FoodPosts.findById(postId).exec();
+    try {
+        const existRequest = await FoodPosts.findById(postId);
 
-    if (!existRequest) {
+        if (existRequest.status !== 'pending') {
+            return res.status(400).send({ message: 'This request has been approved or rejected.'})
+        }
+
+        existRequest.status = 'approved';
+        await existRequest.save();
+
+        return res.status(200).send({ message: "Request approved." })
+    } catch (error) {
+        console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
         return res.status(400).send({ message: 'Request not found.' });
     }
-
-    existRequest.status = 'approved';
-    await existRequest.save();
-
-    return res.status(200).send({ message: "Request approved." })
 });
 
 router.patch('/admin/request/reject', authMiddleware, async (req, res) => {
@@ -72,16 +115,21 @@ router.patch('/admin/request/reject', authMiddleware, async (req, res) => {
         return res.status(400).send({ message: "Only admin can reject this request." });
     }
 
-    const existRequest = await FoodPosts.findById(postId).exec();
+    try {
+        const existRequest = await FoodPosts.findById(postId).exec();
 
-    if (!existRequest) {
+        if (existRequest.status !== 'pending') {
+            return res.status(400).send({ message: 'This request has been approved or rejected.'})
+        }
+
+        existRequest.status = 'rejected';
+        await existRequest.save();
+
+        return res.status(200).send({ message: "Request rejected." })
+    } catch (error) {
+        console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
         return res.status(400).send({ message: 'Request not found.' });
     }
-
-    existRequest.status = 'rejected';
-    await existRequest.save();
-
-    return res.status(200).send({ message: "Request rejected." })
 });
 
 module.exports = router;
