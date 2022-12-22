@@ -85,7 +85,7 @@ router.patch('/admin/request/approve', authMiddleware, async (req, res) => {
     const { user } = res.locals;
     const isAdmin = user.isAdmin;
 
-    if (!isAdmin) {
+    if (isAdmin === false) {
         return res.status(400).send({ message: "Only admin can approve this request." });
     }
 
@@ -111,7 +111,7 @@ router.patch('/admin/request/reject', authMiddleware, async (req, res) => {
     const { user } = res.locals;
     const isAdmin = user.isAdmin;
 
-    if (!isAdmin) {
+    if (isAdmin === false) {
         return res.status(400).send({ message: "Only admin can reject this request." });
     }
 
