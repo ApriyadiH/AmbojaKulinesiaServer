@@ -5,6 +5,7 @@ const userRouter = require("./user");
 const adminRouter = require("./admin");
 const listRouter = require("./foodList");
 const detailRouter = require("./detail");
+const commentRouter = require("./comments");
 const testRouter = require("./test");
 
 module.exports = [
@@ -15,5 +16,6 @@ module.exports = [
     adminRouter,
     listRouter,
     detailRouter,
+    commentRouter,
     testRouter
 ];
