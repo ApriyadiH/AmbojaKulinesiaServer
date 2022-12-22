@@ -9,7 +9,6 @@ const Foods = require("../schemas/foodPosts");
 router.get("/food/region/:region", async (req, res) => {
   const {region} = req.params
   const format_region = region.toLowerCase().split('_').map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')
-  console.log(format_region)
   const fetchRegion = await Foods.find({region: format_region, status: "approved"} );
 
   const results = fetchRegion.map((content) => {
