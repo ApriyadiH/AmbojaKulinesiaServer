@@ -3,6 +3,7 @@ const loginRouter = require("./login");
 const foodsRouter = require("./foodPosts");
 const userRouter = require("./user");
 const adminRouter = require("./admin");
+const listRouter = require("./foodList");
 const testRouter = require("./test");
 
 module.exports = [
@@ -11,5 +12,6 @@ module.exports = [
     foodsRouter,
     userRouter,
     adminRouter,
+    listRouter,
     testRouter
 ];
