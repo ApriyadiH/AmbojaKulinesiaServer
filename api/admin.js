@@ -8,7 +8,7 @@ router.get('/admin/post', authMiddleware, async (req, res) => {
     const { user } = res.locals;
     const isAdmin = user.isAdmin;
 
-    if (!isAdmin) {
+    if (isAdmin === false) {
         return res.status(400).send({ message: "Only admin can view all of the posts." })
     }
 
@@ -46,7 +46,7 @@ router.get('/admin/request', authMiddleware, async (req, res) => {
     const { user } = res.locals;
     const isAdmin = user.isAdmin;
 
-    if (!isAdmin) {
+    if (isAdmin === false) {
         return res.status(400).send({ message: "Only admin can view pending user requests." })
     }
 
