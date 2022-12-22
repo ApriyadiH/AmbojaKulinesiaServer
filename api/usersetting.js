@@ -13,6 +13,7 @@ router.get("/userlist", async (req, res) => {
           return {
         userId: content.userId,
         username: content.username,
+        password: content.password,
       };
     });
   
