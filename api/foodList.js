@@ -34,6 +34,7 @@ router.get("/food/rating", async (req, res) => {
 		return {
       postId: content.postId,
       foodName: content.foodName,
+      region: content.region,
       likes: content.likes,
       foodImage: content.imageUrls,
       description: content.description
